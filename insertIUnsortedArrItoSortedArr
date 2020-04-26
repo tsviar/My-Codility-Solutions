@@ -1,0 +1,128 @@
+
+///=======================================================================
+////   FTP insert unsorted data packet to its right place
+////=====================================================================
+
+// Basic function: insert one new number
+//===================================================
+
+const InsertSortInputData = (newArrival, InSortedA) => {
+  //console.log('insertSortInputData START)', newArrival,  InSortedA );
+
+  let SArr = [];
+
+  if (InSortedA.length === 0) {
+    SArr.push(newArrival);
+
+    //console.log('InSortedA.length === 0 SArr ' , SArr);
+
+    return SArr;
+  } else {
+    SArr = InSortedA.concat();
+    //console.log('copy InArr  SArr ' , InSortedA, SArr);
+  }
+
+  //console.log('insertSortInputData 2 newArrival InSortedA SArr',
+  //                                 newArrival, InSortedA, SArr );
+
+  // find first index of a bigger then val
+
+  if (InSortedA[InSortedA.length - 1] <= newArrival) {
+    SArr.push(newArrival);
+    // console.log('push at END InSortedA SArr ' , InSortedA, SArr);
+
+    return SArr;
+  }
+
+  // -4 -3 -2 -1 0 1 2 3 4
+
+  var foundBigger = SArr.find(sa => sa >= newArrival);
+  //console.log('insertSortInputData foundBigger)',  foundBigger );
+
+  var foundBiggerIdx = SArr.indexOf(foundBigger);
+  //console.log('insertSortInputData foundBiggerIdx)',  foundBiggerIdx );
+
+  const INSERT_ONLY = 0;
+  SArr.splice(foundBiggerIdx, INSERT_ONLY, newArrival);
+
+  //console.log('insertSortInputData END)', newArrival,  SArr );
+
+  return SArr;
+};
+
+const SA = [-4, -1, 0, 0, 3, 3, 3, 4, 4, 5, 5];
+//const SA = [];
+//  0   1  2  3  4  5  6  7   8  9  10
+//const newVal = 9;
+//const newVal = 2;
+//const newVal = 5;
+const newVal = 3;
+
+console.log("calling insertSortInputData)", newVal, SA);
+
+var t0 = performance.now();
+
+var SAOut = InsertSortInputData(newVal, SA); // <---- The function you're measuring time for
+
+var t1 = performance.now();
+
+console.log("result SAOut", SAOut);
+console.log("Call to InsertSortInputData took " + (t1 - t0) + " milliseconds.");
+
+/*
+// Tests results
+3
+[-4, -1, 0, 0, 3, 3, 3, 4, 4, 5, 5]
+[-4, -1, 0, 0, 3, 3, 3, 3, 4, 4, 5, 5]
+5
+[-4, -1, 0, 0, 3, 3, 3, 4, 4, 5, 5]
+[-4, -1, 0, 0, 3, 3, 3, 4, 4, 5, 5, 5]
+
+2
+[-4, -1, 0, 0, 3, 3, 3, 4, 4, 5, 5]
+[-4, -1, 0, 0, 2, 3, 3, 3, 4, 4, 5, 5]
+
+-9
+[-4, -1, 0, 0, 3, 3, 3, 4, 4, 5, 5]
+[-9, -4, -1, 0, 0, 3, 3, 3, 4, 4, 5, 5]
+
+-9
+[]
+[-9]
+*/
+
+
+// Usage function: insert an unsorted set of numbers
+//===================================================
+
+const InsertSortInputStream = (InArr, S) => {
+  const lenInArr = InArr.length | 0;
+  var StempArr = S.concat();
+
+  for (let i = 0; i < lenInArr; i++) {
+    StempArr = InsertSortInputData(InArr[i], StempArr);
+  }
+
+  return StempArr;
+};
+
+const SA1 = [-4, -1, 0, 0, 3, 3, 3, 4, 4, 5, 5];
+//const SA = [];
+const newData = [-7, 6, 8, 3, -3, 0, 70, -12, 2, 1, 5];
+
+var t0 = performance.now();
+
+let resSortedArr = InsertSortInputStream(newData, SA1);
+
+var t1 = performance.now();
+
+console.log("InsertSortInputStream res", resSortedArr);
+console.log(
+  "Call to InsertSortInputStream took " + (t1 - t0) + " milliseconds."
+);
+
+// Tests and desired results
+/*
+[-4, -1, 0, 0, 3, 3, 3, 4, 4, 5, 5]
+[-12, -7, -4, -3, -1, 0, 0, 0, 1, 2, 3, 3, 3, 3, 4, 4, 5, 5, 5, 6, 8, 70]
+*/
